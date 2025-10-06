@@ -15,17 +15,26 @@ read_verilog -I /home/vishal/VSDBabySoC/src/include /home/vishal/VSDBabySoC/outp
 read_liberty -lib /home/vishal/VSDBabySoC/src/lib/avsddac.lib
 read_liberty -lib /home/vishal/VSDBabySoC/src/lib/avsdpll.lib
 read_liberty -lib /home/vishal/VSDBabySoC/src/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+
 ```
+Reading verilog and liberty files is the first step to creating gate level netlist.
 
 ```
 synth -top vsdbabysoc
 ```
+
+It tells Yosys which module is the design’s entry point for synthesis; Yosys will elaborate the hierarchy starting at vsdbabysoc, resolve parameters/generates, flatten as configured, and then map the reachable logic to the target cell library to produce a gate-level netlist.
+
 ```
 dfflibmap -liberty /home/vishal/VSDBabySoC/src/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
 ```
+This command maps all flip-flops (DFFs) in your synthesized design to the actual standard-cell flip-flops from the specified Sky130 Liberty library.
+
 ```
 abc -liberty /home/vishal/VSDBabySoC/src/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
 ```
+This command invokes the ABC logic optimization and technology mapping tool (integrated via Yosys) to map your design’s combinational logic gates to the real standard cells provided by the specified Liberty file.
+
 
 ```
 stat
@@ -54,7 +63,9 @@ gtkwave post_synth_sim.vcd
 
 Waveform generated:
 
-<img src="images/diagram.png" alt="My Diagram" width="900"/>
+<img src="../Screenshots-20251006T162544Z-1-001/Screenshots/Screenshot from 2025-10-06 20-01-51.png" alt="My Diagram" width="900"/>
+
+**Explanation:** The waveform shown in the screenshot is a GTKWave view of the post-synthesis gate-level simulation (GLS) for the VSDBbaysoc testbench. The displayed signals, such as CLK, reset, and OUT (with D[9:0]), indicate that the synthesized design is functionally correct at the gate level—producing expected outputs for given test inputs after synthesis. The correct toggling of the OUT signal, aligned with the clock and reset, confirms that functional behavior is preserved through the full synthesis and netlist mapping flow. This demonstrates that the gate-level netlist matches RTL intent and works as intended under simulated conditions.
 
 
 
