@@ -61,7 +61,7 @@ gtkwave post_synth_sim.vcd
 
 ```
 
-Waveform generated:
+## Waveform generated:
 
 <img src="../Screenshots-20251006T162544Z-1-001/Screenshots/Screenshot from 2025-10-06 20-01-51.png" alt="My Diagram" width="900"/>
 
